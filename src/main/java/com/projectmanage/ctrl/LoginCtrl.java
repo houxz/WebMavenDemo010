@@ -40,6 +40,7 @@ public class LoginCtrl  extends BaseCtrl{
 			}
 			else {
 				
+				System.out.println("====LoginCtrl:login1========");
 				EmployeeModel record = new EmployeeModel();
 				record.setUsername(account);
 				EmployeeModel user = emapgoAccountService.getOneEmployeeWithCache(record);
