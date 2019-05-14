@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	                    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+<!-- 配置扫描的包，会扫描路径下所有包中的含有注解的类（如@Controller, @Service等） -->
+    <context:component-scan base-package="com.projectmanage" />
+	 
+	 <!-- Root Context: defines shared resources visible to all other web components -->
+	<!-- DB 配置 开始 -->
+	<context:property-placeholder location="WEB-INF/spring/db41.101.properties" ignore-unresolvable="true"/>
+
+	<!-- MySql 配置 -->
+	<bean id="dataSourceMySqlForAccount" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${account.driverClassName}" />
+		<property name="url" value="${account.url}" />
+		<property name="username" value="${account.username}" />
+		<property name="password" value="${account.password}" />
+		<!-- 初始化连接大小  -->
+		<property name="initialSize" value="${account.initialSize}" />
+		<!-- 连接池最大空闲 -->
+		<property name="maxIdle" value="${account.maxIdle}" />
+		<!-- 连接池最小空闲 -->
+		<property name="minIdle" value="${account.minIdle}" />
+		<!-- 连接池最大连接数 -->
+		<property name="maxActive" value="${account.maxActive}" />
+		<property name="logAbandoned" value="${account.logAbandoned}" />
+		<property name="validationQuery" value="${account.validationQuery}" />
+		<property name="testOnBorrow" value="${account.testOnBorrow}" />
+		<property name="testWhileIdle" value="${account.testWhileIdle}" />
+		<property name="removeAbandoned" value="${account.removeAbandoned}" />
+		<property name="removeAbandonedTimeout" value="${account.removeAbandonedTimeout}" />
+		<!-- 获取连接最大等待时间 -->
+		<property name="maxWait" value="${account.maxWait}" />
+	</bean>
+	
+		<!-- Projects 配置 -->
+	<bean id="dataSourceMySqlForProjectmanager" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${projectmanager.driverClassName}" />
+		<property name="url" value="${projectmanager.url}" />
+		<property name="username" value="${projectmanager.username}" />
+		<property name="password" value="${projectmanager.password}" />
+		<property name="initialSize" value="${projectmanager.initialSize}" />
+		<property name="maxIdle" value="${projectmanager.maxIdle}" />
+		<property name="minIdle" value="${projectmanager.minIdle}" />
+		<property name="maxActive" value="${projectmanager.maxActive}" />
+		<property name="logAbandoned" value="${projectmanager.logAbandoned}" />
+		<property name="validationQuery" value="${projectmanager.validationQuery}" />
+		<property name="testOnBorrow" value="${projectmanager.testOnBorrow}" />
+		<property name="testWhileIdle" value="${projectmanager.testWhileIdle}" />
+		<property name="removeAbandoned" value="${projectmanager.removeAbandoned}" />
+		<property name="removeAbandonedTimeout" value="${projectmanager.removeAbandonedTimeout}" />
+		<property name="maxWait" value="${projectmanager.maxWait}" />
+	</bean>
+	
+	
+	<!-- emapgoaccount库 mybatis配置 -->
+	<bean id="sqlSessionFactoryForEmapgoaccount" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSourceMySqlForAccount" />
+		<property name="mapperLocations"
+			value="classpath:com/projectmanage/mapping/emapgoaccount/AuthorityModelMapper.xml" />
+	</bean>
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.projectmanage.dao.emapgoaccount" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactoryForEmapgoaccount" />
+	</bean>
+	    
+	 <!-- projectsmanager库 mybatis配置 -->
+	<bean id="sqlSessionFactoryForProject" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSourceMySqlForProjectmanager" />
+		<property name="mapperLocations"
+			value="classpath:com/projectmanage/mapping/projectmanager/*.xml" />
+	</bean>
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.projectmanage.dao.projectmanager" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactoryForProject" />
+	</bean>   
+	    
+	                    
+</beans>
